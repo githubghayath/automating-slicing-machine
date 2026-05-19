@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -86,14 +87,18 @@ namespace WindowsFormsApp1.Helper
         {
             return FeedPerTeethInMeter * Math.Sin(clsHelper.DegreesToRadians(AngleInDegrees)); 
         }
-        public static List<double> ChipThicknessAtStudiedAngles(List<double> AnglesInDegrees, double FeedPerTeethInMeter)
+        public static Dictionary<double, double> ChipThicknessAtStudiedAngles(List<double> AnglesInDegrees, double FeedPerTeethInMeter)
         {
-            List<double> ChipThicknesses = new List<double>();
+            Dictionary<double, double> PairOfAngleWithChipThickness = new Dictionary<double, double>();
+
+           
 
             foreach (double Angle in AnglesInDegrees)
-                ChipThicknesses.Add(_TheChipThicknessInCustomAngle(Angle, FeedPerTeethInMeter));
-
-            return ChipThicknesses;
+            {
+                PairOfAngleWithChipThickness.Add(Angle, _TheChipThicknessInCustomAngle(Angle, FeedPerTeethInMeter));
+               
+            }
+            return PairOfAngleWithChipThickness;
         }
         public static double CuttingForce_Unit_Newton(double ShearYieldStressInMegaPas , double KerfThicknessInMeter , double ShearStrainAlongTheShearPlane,
             double FrictionCorrectionCoefficient,double TheMeanChipThicknessInMeter,double SpecificWorkOfASurfaceSeparationInJoulPerSqarMeter)
@@ -162,6 +167,11 @@ namespace WindowsFormsApp1.Helper
         public static double MomentOfCuttingForce_Unit_NewtonMeter(double CuttingForceInNewton, double RadiusOfCuttingDiskInMeter)
         {
             return CuttingForceInNewton * RadiusOfCuttingDiskInMeter;
+        }
+
+        public static double VolumetricProductionRateMeter3PerHour(double FeedVelocityInMeterPerSecond, double ProductSectionAreaInMeter2)
+        {
+            return (FeedVelocityInMeterPerSecond * ProductSectionAreaInMeter2) * 60 * 60;
         }
     }
 }

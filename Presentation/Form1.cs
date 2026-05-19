@@ -1,4 +1,10 @@
-﻿using System;
+﻿using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Presentation.DataBase.Wood;
+using Presentation.Forms;
+using Presentation.UserControls;
+using ScottPlot.Plottables;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -9,29 +15,64 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApp1.Helper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+
+        // Database operations
+        private void _FullComboBoxWithWoodTypes()
+        {
+            List<WoodType> Types = WoodCRUD.GetWoodList();
+
+            foreach (WoodType type in Types)
+            {
+                cbWoodType.Items.Add(type.Type);
+            }
+            cbWoodType.SelectedIndex = 0;
+        }
+
         public Form1()
         {
             InitializeComponent();
             InitializeDataGridView();
+            _InitializeMachinePerformancePanel();
+            _IntializeHistoryPage();
+            _IntializeMaintenancePage();
         }
+        private ScottPlot.WinForms.FormsPlot formsPlot1MachinePerformance;
+        private ScottPlot.WinForms.FormsPlot formsPlot2MachinePerformance;
+        private Panel pnlMachinePerformence;
+        private Panel pnlHistoryPage;
+        private Panel pnlMaintenancePage;
+
 
         private DataGridView dgvForces;
+        private DataGridView dgvAngleAndthickness;
 
         private void InitializeDataGridView()
         {
-            dgvForces = new DataGridView
+            dgvAngleAndthickness = new DataGridView
             {
                 Dock = DockStyle.Fill,
                 AllowUserToAddRows = false,
                 ReadOnly = true,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-               
-               
+            };
+
+            dgvAngleAndthickness.Columns.Add("AnglesOfTeethInvolvedInCuttingInDegrees", "Angles Of Teeth Involved In Cutting [Degrees]");
+            dgvAngleAndthickness.Columns.Add("ChipThicknessAtStudiedAnglesInMeter", "Chip thickness at studied Angles [Meter]");
+
+
+            dgvForces = new DataGridView
+            {
+                Dock = DockStyle.Top,
+                AllowUserToAddRows = false,
+                ReadOnly = true,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+
             };
 
             dgvForces.Columns.Add("Theta", "Theta");
@@ -45,27 +86,34 @@ namespace WindowsFormsApp1
             dgvForces.Columns.Add("CuttingForceMoment", "Cutting Force Moment");
 
 
-            // 🔹 Dock DataGridView inside the panel
+            // Dock DataGridView inside the panel
             pnlForceValues.Controls.Clear();     // optional (remove old controls)
+            pnlAnglesWithThickness.Controls.Clear();
 
             pnlForceValues.Controls.Add(dgvForces);
+            pnlAnglesWithThickness.Controls.Add(dgvAngleAndthickness);
         }
 
-        public void AddForceRow(double theta,double cuttingForce,double activeForce,double frictionForce,double thrustForce,double shearForce,double normalToShear,double normalToRake,double MomentOfCuttingForce)
+        public void AddForceRow(double theta, double cuttingForce, double activeForce, double frictionForce, double thrustForce, double shearForce, double normalToShear, double normalToRake, double MomentOfCuttingForce)
         {
-            dgvForces.Rows.Add(theta,cuttingForce,activeForce,frictionForce,thrustForce,shearForce,normalToShear,normalToRake, MomentOfCuttingForce);
+            dgvForces.Rows.Add(theta, cuttingForce, activeForce, frictionForce, thrustForce, shearForce, normalToShear, normalToRake, MomentOfCuttingForce);
+        }
+
+        public void AddAngleWithChipThicknessRow(double Angle, double chipThickness)
+        {
+            dgvAngleAndthickness.Rows.Add(Angle, chipThickness);
         }
 
 
 
         // Cutting Environment
         private double _FeedVelocity = .0d;
-        private double _MinCuttingVelocity = .0d;
         private double _MaxCuttingVelocity = .0d;
         private double _CoefficientOfFriction = .0d;
         private double _DepthOfCutWoodInMeter = .0d;
         private int _NumberOfBlades = 0;
         private double _TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWoodInMeter = .0d;
+        private double _VolumetricProductionRateMeter3Hour = .0d;
 
 
         // Tool Properties 
@@ -89,7 +137,7 @@ namespace WindowsFormsApp1
         double _TheMeanChipThicknessInMeter = .0d;
         double _CuttingForceInNewton = .0d;
         List<double> _StudiedAngles = new List<double>();
-        List<double> _ChipThicknessAtStudiedAngles = new List<double>();
+        Dictionary<double, double> _ChipThicknessAtStudiedAngles = new Dictionary<double, double>();
         double _ActiveForceInNewton = .0d;
         double _FrictionForceOnRakeInNewton = .0d;
         double _ThrustForceInNewton = .0d;
@@ -98,23 +146,25 @@ namespace WindowsFormsApp1
         double _NormalForceToRakeInNewton = .0d;
         double _CuttingForceMomentInNewtonMeter = .0d;
         double _MaxSheftsTorque = .0d;
+        double _ShearYieldStress = .0d;
+        double _SpecificWorkToSurfaceSeparationInJoulPerMeter2 = .0d;
+        WoodType _SelectedWood;
 
 
         private void _FillPropertiesValue()
         {
 
 
-             _FeedVelocity = Convert.ToDouble(clsHelper.ReadFromConfiguration("FeedVelocity"));  // m/min
+            _FeedVelocity = Convert.ToDouble(clsHelper.ReadFromConfiguration("FeedVelocity"));  // m/min
             _NumberOfBlades = Convert.ToInt32(clsHelper.ReadFromConfiguration("NumberOfBlades"));
-            _MinCuttingVelocity = clsHelper.MeterPerSecToMeterPerMin( Convert.ToDouble(clsHelper.ReadFromConfiguration("MinCuttingVelocity"))); // m/sec
+
             _MaxCuttingVelocity = clsHelper.MeterPerSecToMeterPerMin(Convert.ToDouble(clsHelper.ReadFromConfiguration("MaxCuttingVelocity"))); // m/sec
-             _CoefficientOfFriction = Convert.ToDouble(txtCoefficientOfFriction.Text);  // None
             _DepthOfCutWoodInMeter = clsHelper.MillimeterToMeter(Convert.ToDouble(clsHelper.ReadFromConfiguration("DepthOfCutWood")));  // mm
-            _TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWoodInMeter =clsHelper.MillimeterToMeter( Convert.ToDouble(clsHelper.ReadFromConfiguration("TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWood"))); // mm
+            _TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWoodInMeter = clsHelper.MillimeterToMeter(Convert.ToDouble(clsHelper.ReadFromConfiguration("TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWood"))); // mm
             _RakeAngleInDegrees = Convert.ToDouble(clsHelper.ReadFromConfiguration("RakeAngle")); // degrees
             _NumberOfTooth = Convert.ToInt32(clsHelper.ReadFromConfiguration("NumberOfTooth"));  // tooth
-            _BladeDiameter =clsHelper.MillimeterToMeter( Convert.ToDouble(clsHelper.ReadFromConfiguration("BladeDiameter")));  // mm
-            _KerfThicknessInMeter =clsHelper.MillimeterToMeter( Convert.ToDouble(clsHelper.ReadFromConfiguration("KerfThickness"))); // mm
+            _BladeDiameter = clsHelper.MillimeterToMeter(Convert.ToDouble(clsHelper.ReadFromConfiguration("BladeDiameter")));  // mm
+            _KerfThicknessInMeter = clsHelper.MillimeterToMeter(Convert.ToDouble(clsHelper.ReadFromConfiguration("KerfThickness"))); // mm
         }
 
 
@@ -132,13 +182,17 @@ namespace WindowsFormsApp1
             _TheMeanChipThicknessInMeter = clsMainEquations.TheMeanChipThickness_Unit_Meter(_CenterAngleOfCuttingInDegrees, _FeedPerTeethInMeterPerTeeth);
             _StudiedAngles = clsMainEquations.GetStudiedAngles(_DepthOfCutWoodInMeter, _TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWoodInMeter, _BladeDiameter / 2, _NumberOfTooth);
             _ChipThicknessAtStudiedAngles = clsMainEquations.ChipThicknessAtStudiedAngles(_StudiedAngles, _FeedPerTeethInMeterPerTeeth);
+            _VolumetricProductionRateMeter3Hour = clsMainEquations.VolumetricProductionRateMeter3PerHour(clsHelper.MeterPerMinToMeterPerSec(_FeedVelocity), (0.03 * 0.2));
         }
-
+        private void _FullAngleWithChipThicknessTable()
+        {
+            foreach (KeyValuePair<double, double> kvp in _ChipThicknessAtStudiedAngles)
+                AddAngleWithChipThicknessRow(kvp.Key, kvp.Value);
+        }
         private void _ResultToScreen()
         {
 
             lblFeedVelocity.Text = _FeedVelocity.ToString();
-            lblMinCuttingVelocity.Text = _MinCuttingVelocity.ToString();
             lblMaxCuttingVelocity.Text = _MaxCuttingVelocity.ToString();
             lblCoefficientOfFriction.Text = _CoefficientOfFriction.ToString();
             lblFeedPerTeeth.Text = _FeedPerTeethInMeterPerTeeth.ToString();
@@ -152,10 +206,9 @@ namespace WindowsFormsApp1
             lblCenterCuttingAngle.Text = _CenterAngleOfCuttingInDegrees.ToString();
             lblTheMeanChipThickness.Text = _TheMeanChipThicknessInMeter.ToString();
             lblNumberOfTeethInvolvedInCutting.Text = (_StudiedAngles.Count - 1).ToString(); // Without Enter Angle 
-            lblAnglesOfTeethInvolvedInCutting.Text = string.Join("\n", _StudiedAngles);
-            lblChipThicknessAtStudiedAngles.Text = string.Join("\n", _ChipThicknessAtStudiedAngles);
+            _FullAngleWithChipThicknessTable();
             lblNumberOfBlades.Text = _NumberOfBlades.ToString();
-
+            lblVolumetricProductionRateMeter3Hour.Text = _VolumetricProductionRateMeter3Hour.ToString().Substring(0, 4);
 
         }
 
@@ -169,73 +222,61 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Just For Test 
-            txtShearYieldStress.Text = 57.155.ToString();
-            txtSpecificWorkToSurfaceSeparation.Text = 1772.611.ToString();
-            txtCoefficientOfFriction.Text = 0.565.ToString();
-
-
-            // _DisplayResult();
-
-
-            
-            cbWoodType.Items.Add("Select Wood Type");
-            cbWoodType.Items.Add("Native beech");
-            cbWoodType.Items.Add("Bendywood");
-            cbWoodType.Items.Add("DMDHEU");
-            cbWoodType.Items.Add("Lignamon 783");
-            cbWoodType.Items.Add("Lignamon 1185");
-            cbWoodType.Items.Add("Beech16");
-            cbWoodType.Items.Add("Spruce8");
-            cbWoodType.Items.Add("Spruce16");
-            cbWoodType.Items.Add("Beech8");
-            cbWoodType.SelectedIndex = 0;
-    
-
-
-
+            _FullComboBoxWithWoodTypes();
+            _IntializingPerformanceCharts();
+            pnlCalculationPage.Controls.Add(pnlHeader);
+            pnlCalculationPage.Controls.Add(pnlForceValues);
+            pnlCalculationPage.Controls.Add(pnlBody);
+            pnlCalculationPage.Visible = true;
+            pnlMachinePerformence.Visible = false;
+            pnlHistoryPage.Visible = false;
+            pnlMaintenancePage.Visible = false;
         }
 
         private void btnCalculateForces_Click(object sender, EventArgs e)
         {
+            if (cbWoodType.SelectedIndex != 0)
+            {
+
+                _DisplayResult();
+
+                CalculateForces();
+                lblCuttingForce.Text = $"{_CuttingForceInNewton}";
+                lblActiveForce.Text = $"{_ActiveForceInNewton}";
+                lblThrustForce.Text = $"{_ThrustForceInNewton}";
+                lblShearForce.Text = $"{_ShearForceInNewton}";
+                lblNormalForceToShearPlane.Text = $"{_NormalForceToShearPlaneInNewton}";
+                lblNormalForceToRake.Text = $"{_NormalForceToRakeInNewton}";
+                lblFrictionForceOnRake.Text = $"{_FrictionForceOnRakeInNewton}";
+                // _PlotLinearFunction(slope: 485979, intercept: 6.3814, xMin: 0, xMax: 0.002, step: 0.000001);
+                //F1zc = 485979hm + 6.3814
+
+                double _ForceSlop = (_ShearYieldStress * 1000000 * _KerfThicknessInMeter * _ShearingStrainAlongShearPlane) / _FrictionCorrectionCoefficient;
+                double _ForceIntercept = _SpecificWorkToSurfaceSeparationInJoulPerMeter2 * _KerfThicknessInMeter / _FrictionCorrectionCoefficient;
 
 
-            _DisplayResult();
+                double _MomentSlop = _ForceSlop * _NumberOfBlades * (_BladeDiameter / 2);
+                double _MomentIntercept = _ForceIntercept * _NumberOfBlades * (_BladeDiameter / 2);
 
-            CalculateForces();
-            lblCuttingForce.Text = $"Cutting Force [N]: {_CuttingForceInNewton}";
-            lblActiveForce.Text = $"ActiveForce [N]: {_ActiveForceInNewton}";
-            lblThrustForce.Text = $"Thrust Force [N]: {_ThrustForceInNewton}";
-            lblShearForce.Text= $"Shear Force [N]: {_ShearForceInNewton}";
-            lblNormalForceToShearPlane.Text= $"Normal Force To Shear Plane [N]: {_NormalForceToShearPlaneInNewton}";
-            lblNormalForceToRake.Text= $"Normal Force To Rake [N]: {_NormalForceToRakeInNewton}";
-            lblFrictionForceOnRake.Text = $"Friction Force On Rake [N]: {_FrictionForceOnRakeInNewton}";
-            // _PlotLinearFunction(slope: 485979, intercept: 6.3814, xMin: 0, xMax: 0.002, step: 0.000001);
-            //F1zc = 485979hm + 6.3814
+                lblSheftTorquAsFunction.Text = $"{_MomentSlop} hm + {_MomentIntercept}";
+                lblCuttingForceAsAFunction.Text = $"{_ForceSlop} hm + {_ForceIntercept}";
 
-            double _ForceSlop = (Convert.ToDouble(txtShearYieldStress.Text) * 1000000 * _KerfThicknessInMeter * _ShearingStrainAlongShearPlane) / _FrictionCorrectionCoefficient;
-            double _ForceIntercept = Convert.ToDouble(txtSpecificWorkToSurfaceSeparation.Text) * _KerfThicknessInMeter / _FrictionCorrectionCoefficient;
+                _PlotLinearCuttingForceFunction(slope: _ForceSlop, intercept: _ForceIntercept, xMin: 0, xMax: _ChipThicknessAtStudiedAngles.Values.ToList()[0], step: 0.000001);
+                _PlotLinearMomentForceFunction(slope: _MomentSlop, intercept: _MomentIntercept, xMin: 0, xMax: _ChipThicknessAtStudiedAngles.Values.ToList()[0], step: 0.000001);
 
 
-            double _MomentSlop = _ForceSlop * _NumberOfBlades * (_BladeDiameter / 2);
-            double _MomentIntercept = _ForceIntercept * _NumberOfBlades * (_BladeDiameter / 2);
-
-            lblSheftTorquAsFunction.Text = $"{_MomentSlop} hm + {_MomentIntercept}";
-            lblCuttingForceAsAFunction.Text = $"{_ForceSlop} hm + {_ForceIntercept}";
-
-            _PlotLinearCuttingForceFunction(slope: _ForceSlop, intercept: _ForceIntercept, xMin: 0, xMax: _ChipThicknessAtStudiedAngles[0], step: 0.000001);
-            _PlotLinearMomentForceFunction(slope: _MomentSlop, intercept: _MomentIntercept, xMin: 0, xMax: _ChipThicknessAtStudiedAngles[0], step: 0.000001);
-
-
-            _FillDataGridView();
-           
+                _FillDataGridView();
+                btnStartMachine.Enabled = true;
+            }
+            else
+                MessageBox.Show("Select a wood type to perform calculations", "Select to confirm", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void CalculateForces()
         {
-            
-            _CuttingForceInNewton = clsMainEquations.CuttingForce_Unit_Newton(Convert.ToDouble(txtShearYieldStress.Text), _KerfThicknessInMeter, _ShearingStrainAlongShearPlane
-                , _FrictionCorrectionCoefficient, _TheMeanChipThicknessInMeter, Convert.ToDouble(txtSpecificWorkToSurfaceSeparation.Text));
+
+            _CuttingForceInNewton = clsMainEquations.CuttingForce_Unit_Newton(_ShearYieldStress, _KerfThicknessInMeter, _ShearingStrainAlongShearPlane
+                , _FrictionCorrectionCoefficient, _TheMeanChipThicknessInMeter, _SpecificWorkToSurfaceSeparationInJoulPerMeter2);
 
             _ActiveForceInNewton = clsMainEquations.ActiveForce_Unit_Newton(_CuttingForceInNewton);
             _ThrustForceInNewton = clsMainEquations.ThrustForce_Unit_Newton(_CuttingForceInNewton);
@@ -254,8 +295,8 @@ namespace WindowsFormsApp1
 
             for (int i = 0; i < _ChipThicknessAtStudiedAngles.Count; i++)
             {
-                _CuttingForceInNewton = clsMainEquations.CuttingForce_Unit_Newton(Convert.ToDouble(txtShearYieldStress.Text), _KerfThicknessInMeter, _ShearingStrainAlongShearPlane
-                   , _FrictionCorrectionCoefficient, _ChipThicknessAtStudiedAngles[i], Convert.ToDouble(txtSpecificWorkToSurfaceSeparation.Text));
+                _CuttingForceInNewton = clsMainEquations.CuttingForce_Unit_Newton(_ShearYieldStress, _KerfThicknessInMeter, _ShearingStrainAlongShearPlane
+                   , _FrictionCorrectionCoefficient, _ChipThicknessAtStudiedAngles.Values.ToList()[i], _SpecificWorkToSurfaceSeparationInJoulPerMeter2);
                 _ActiveForceInNewton = clsMainEquations.ActiveForce_Unit_Newton(_CuttingForceInNewton);
                 _ThrustForceInNewton = clsMainEquations.ThrustForce_Unit_Newton(_CuttingForceInNewton);
                 _ShearForceInNewton = clsMainEquations.ShearForce_Unit_Newton(clsHelper.DegreesToRadians(_ShearAngleInDegrees), _CuttingForceInNewton);
@@ -279,7 +320,7 @@ namespace WindowsFormsApp1
         }
 
 
-        private void _PlotLinearCuttingForceFunction(double slope,double intercept,double xMin,double xMax,double step)
+        private void _PlotLinearCuttingForceFunction(double slope, double intercept, double xMin, double xMax, double step)
         {
             List<double> hm = new List<double>();
 
@@ -317,7 +358,7 @@ namespace WindowsFormsApp1
             formsPlot1.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#F0F0F0"); // light gray
             formsPlot1.Plot.DataBackground.Color = ScottPlot.Color.FromHex("#FFFFFF"); // white
 
-     
+
             scatter.LegendText = "Fc = a·hm + b";
             formsPlot1.Plot.Legend.IsVisible = true;
 
@@ -375,7 +416,312 @@ namespace WindowsFormsApp1
             formsPlot2.Refresh();
         }
 
-      
-    
+        private void cbWoodType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbWoodType.SelectedIndex != 0)
+            {
+                _SelectedWood = WoodCRUD.GetWoodByName(cbWoodType.SelectedItem!.ToString()!);
+
+                _ShearYieldStress = _SelectedWood.ShearYieldStressInMpa;
+                _SpecificWorkToSurfaceSeparationInJoulPerMeter2 = _SelectedWood.SpecificWorkToSurfaceSeparationJoulPerMeter2;
+                _CoefficientOfFriction = _SelectedWood.CoefficientOfFriction;
+
+                lblShearYieldStress.Text = _ShearYieldStress.ToString();
+                lblSpecificWorkToSurfaceSeparation.Text = _SpecificWorkToSurfaceSeparationInJoulPerMeter2.ToString();
+                lblCoefficientOfFriction.Text = _CoefficientOfFriction.ToString();
+
+                btnCalculateForces.Enabled = true;
+
+            }
+            else
+            {
+                btnCalculateForces.Enabled = false;
+                btnStartMachine.Enabled = false;
+                btnStopMachine.Enabled = false;
+            }
+
+        }
+
+        private void btnLiveChart_Click(object sender, EventArgs e)
+        {
+            var MechinePerformance = new frmMachinePerformance();
+            MechinePerformance.ShowDialog();
+        }
+
+
+
+
+
+        private void btnStartMachine_Click(object sender, EventArgs e)
+        {
+
+            timer1.Start();
+            btnStartMachine.Enabled = false;
+            btnStopMachine.Enabled = true;
+        }
+
+
+        private void _IntializingPerformanceCharts()
+        {
+            xs = Enumerable.Range(0, plotData.Length)
+                          .Select(i => i * dt)
+                          .ToArray();
+
+            signal = formsPlot1MachinePerformance.Plot.Add.SignalXY(xs, plotData);
+
+            signal.LineWidth = 3;
+            signal.Color = ScottPlot.Colors.BurlyWood;
+
+            formsPlot1MachinePerformance.Plot.Title("Simulated Shaft Torque vs Time");
+            formsPlot1MachinePerformance.Plot.XLabel("Time (s)");
+            formsPlot1MachinePerformance.Plot.YLabel("Torque (Nm)");
+
+            // =========================
+            // NEW: Production chart
+            // =========================
+
+            prodXs = Enumerable.Range(0, prodPlotData.Length)
+                               .Select(i => i * dt)
+                               .ToArray();
+            prodSignal = formsPlot2MachinePerformance.Plot.Add.SignalXY(prodXs, prodPlotData);
+
+            prodSignal.LineWidth = 3;
+            prodSignal.Color = ScottPlot.Colors.DodgerBlue;
+
+            formsPlot2MachinePerformance.Plot.Title("Cumulative Wood Production Over Time");
+            formsPlot2MachinePerformance.Plot.XLabel("Time (s)");
+            formsPlot2MachinePerformance.Plot.YLabel("Volume (m³)");
+
+
+            formsPlot2MachinePerformance.Refresh();
+            formsPlot1MachinePerformance.Refresh();
+        }
+
+        double[] buffer = new double[100];   // circular buffer
+        double[] plotData = new double[100]; // ordered data for plotting
+        double[] xs;
+
+        int index = 0;
+
+        Random rand = new Random();
+        double t = 0;
+        double dt = 0.05;
+
+        SignalXY signal;
+
+        double[] prodBuffer = new double[200];
+        double[] prodPlotData = new double[200];
+        double[] prodXs;
+
+        double prodIndex = 0;
+        double prodTime = 0;
+
+        double feedSpeed = 11.0 / 60.0; // m/s
+        double area = 0.2 * 0.03;       // m²
+
+        SignalXY prodSignal;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            // === 1. Generate new torque value ===
+            double baseTorque = 50;
+            double oscillation = 10 * Math.Sin(t);
+            double noise = rand.NextDouble() * 2 - 1;
+
+            double torque = baseTorque + oscillation + noise;
+
+            // === 5. Update X-axis (SCROLLING WINDOW) ===
+            double windowSize = xs.Length * dt;
+
+            double xMax = xs[xs.Length - 1];
+            double xMin = xMax - windowSize;
+
+            formsPlot1MachinePerformance.Plot.Axes.SetLimitsX(xMin, xMax);
+
+
+
+            // === 2. Insert into circular buffer ===
+            buffer[index] = torque;
+
+            index = (index + 1) % buffer.Length;
+
+            t += dt;
+
+            // === 3. Rebuild ordered array (for plotting) ===
+            int j = 0;
+
+            for (int i = index; i < buffer.Length; i++)
+                plotData[j++] = buffer[i];
+
+            for (int i = 0; i < index; i++)
+                plotData[j++] = buffer[i];
+
+            // === 4. Update X axis (time sliding window) ===
+            for (int i = 0; i < xs.Length - 1; i++)
+                xs[i] = xs[i + 1];
+
+            xs[xs.Length - 1] = xs[xs.Length - 2] + dt;
+
+            // === 5. Refresh plot ===
+            formsPlot1MachinePerformance.Plot.Axes.AutoScaleY(); // smoother than full autoscale
+
+
+            // ======================================================
+            // NEW SECTION: PRODUCTION CHART (formsPlot2)
+            // ======================================================
+
+            double speedNoise = (rand.NextDouble() - 0.5) * 0.02;
+            double currentSpeed = feedSpeed + speedNoise;
+
+            double rate = currentSpeed * area; // m³/s
+
+            prodBuffer[(int)prodIndex] += rate * dt;
+
+            prodIndex = (prodIndex + 1) % prodBuffer.Length;
+
+            prodTime += dt;
+
+            // reorder production buffer
+            int k = 0;
+
+            for (int i = (int)prodIndex; i < prodBuffer.Length; i++)
+                prodPlotData[k++] = prodBuffer[i];
+
+            for (int i = 0; i < prodIndex; i++)
+                prodPlotData[k++] = prodBuffer[i];
+
+            // prodSignal.Data = prodPlotData;
+
+            double prodWindow = prodXs.Length * dt;
+            double prodXMax = prodTime;
+            double prodXMin = prodXMax - prodWindow;
+
+            formsPlot2MachinePerformance.Plot.Axes.SetLimitsX(prodXMin, prodXMax);
+
+            formsPlot2MachinePerformance.Plot.Axes.AutoScaleY();
+
+            formsPlot1MachinePerformance.Refresh();
+            formsPlot2MachinePerformance.Refresh();
+        }
+
+        private void btnMachinePerformance_Click(object sender, EventArgs e)
+        {
+            pnlCalculationPage.Visible = false;
+            pnlMachinePerformence.Visible = true;
+            pnlHistoryPage.Visible = false;
+            pnlMaintenancePage.Visible = false;
+        }
+
+        private void btnCalculationPage_Click(object sender, EventArgs e)
+        {
+            pnlCalculationPage.Visible = true;
+            pnlMachinePerformence.Visible = false;
+            pnlMaintenancePage.Visible = false;
+            pnlHistoryPage.Visible = false;
+
+        }
+        private void _IntializeHistoryPage()
+        {
+            pnlHistoryPage = new Panel();
+            var HistoryControl = new ucHistory();
+           
+            pnlHistoryPage.Name = "pnlHistoryPage";
+            pnlHistoryPage.Controls.Add(HistoryControl);
+            pnlHistoryPage.Dock = DockStyle.Fill;
+            pnlHistoryPage.BackColor = SystemColors.Control;
+            this.Controls.Add(pnlHistoryPage);
+            pnlHistoryPage.BringToFront(); 
+
+        }
+
+        private void _IntializeMaintenancePage()
+        {
+            pnlMaintenancePage = new Panel();
+            var MaintenanceControl = new ucMaintenance();
+          
+            pnlMaintenancePage.Name = "pnlMaintenancePage";
+            pnlMaintenancePage.Controls.Add(MaintenanceControl);
+            pnlMaintenancePage.Dock = DockStyle.Fill;
+            pnlMaintenancePage.BackColor = SystemColors.Control;
+            this.Controls.Add(pnlMaintenancePage);
+            pnlMaintenancePage.BringToFront();
+
+        }
+
+        private void _InitializeMachinePerformancePanel()
+        {
+            // =========================
+            // Create Main Panel
+            // =========================
+            pnlMachinePerformence = new Panel();
+
+            pnlMachinePerformence.Name = "pnlMachinePerformence";
+            pnlMachinePerformence.Dock = DockStyle.Fill;
+            pnlMachinePerformence.BackColor = SystemColors.Control;
+
+            // Move panel to front in Z-order
+            pnlMachinePerformence.BringToFront();
+
+            // =========================
+            // Create First ScottPlot
+            // =========================
+
+            formsPlot1MachinePerformance = new ScottPlot.WinForms.FormsPlot();
+
+            formsPlot1MachinePerformance.Name = "formsPlot1MachinePerformance";
+            formsPlot1MachinePerformance.Size = new Size(563, 479);
+            formsPlot1MachinePerformance.Location = new Point(51, 36);
+
+            // =========================
+            // Create Second ScottPlot
+            // =========================
+            formsPlot2MachinePerformance = new ScottPlot.WinForms.FormsPlot();
+
+            formsPlot2MachinePerformance.Name = "formsPlot2MachinePerformance";
+            formsPlot2MachinePerformance.Size = new Size(563, 479);
+            formsPlot2MachinePerformance.Location = new Point(772, 36);
+
+            // =========================
+            // Add Charts To Panel
+            // =========================
+            pnlMachinePerformence.Controls.Add(formsPlot2MachinePerformance);
+            pnlMachinePerformence.Controls.Add(formsPlot1MachinePerformance);
+
+            // =========================
+            // Add Panel To Form
+            // =========================
+            this.Controls.Add(pnlMachinePerformence);
+
+            // Make sure panel is at front
+            pnlMachinePerformence.BringToFront();
+        }
+
+        private void btnStopMachine_Click(object sender, EventArgs e)
+        {
+
+            // Here the code that will log the cutting process informations
+            timer1.Stop();
+            btnStartMachine.Enabled = true;
+            btnStopMachine.Enabled = false;
+        }
+
+        private void btnProcessHistory_Click(object sender, EventArgs e)
+        {
+            pnlCalculationPage.Visible = false;
+            pnlMachinePerformence.Visible = false;
+            pnlMaintenancePage.Visible = false;
+            pnlHistoryPage.Visible = true;
+           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            pnlCalculationPage.Visible = false;
+            pnlMachinePerformence.Visible = false;
+            pnlHistoryPage.Visible = false;
+            pnlMaintenancePage.Visible = true;
+        }
+
+
     }
 }
