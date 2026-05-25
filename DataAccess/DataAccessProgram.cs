@@ -18,12 +18,57 @@ namespace DataAccess
             {
                 context.Database.EnsureCreated();
 
-                if(!context.WoodTypes.Any())
-                {
-                    context.WoodTypes.AddRange(SeedData.GetWoods());
-                    context.SaveChanges();
-                }
-                Console.WriteLine("Adding wood types... Done");
+                //// -------------------------
+                //// Wood Types
+                //// -------------------------
+                //if (!context.WoodTypes.Any())
+                //{
+                //    context.WoodTypes.AddRange(SeedData.GetWoods());
+                //    context.SaveChanges();
+                //    Console.WriteLine("Adding wood types... Done");
+                //}
+
+                //// -------------------------
+                //// Production Conditions
+                //// -------------------------
+                //if (!context.ProductionConditions.Any())
+                //{
+                //    context.ProductionConditions.AddRange(SeedData.GetProductionConditions());
+                //    context.SaveChanges();
+                //    Console.WriteLine("Adding production conditions... Done");
+                //}
+
+                //// -------------------------
+                //// Operation Conditions
+                //// -------------------------
+                //if (!context.OperationConditions.Any())
+                //{
+                //    context.OperationConditions.AddRange(SeedData.GetOperationConditions());
+                //    context.SaveChanges();
+                //    Console.WriteLine("Adding operation conditions... Done");
+                //}
+
+                //// -------------------------
+                //// Critical Values
+                //// -------------------------
+                //if (!context.CriticalValues.Any())
+                //{
+                //    context.CriticalValues.AddRange(SeedData.GetCriticalValues());
+                //    context.SaveChanges();
+                //    Console.WriteLine("Adding critical values... Done");
+                //}
+
+                //if(!context.OperationsProcesses.Any())
+                //{
+                //    context.OperationsProcesses.AddRange(SeedData.GetOperationsProcesses());
+                //    context.SaveChanges();
+                //    Console.WriteLine("Adding operations processes... Done");
+                //}
+
+               
+                
+
+                Console.WriteLine("Seeding completed successfully.");
             }
         }
     }

@@ -14,5 +14,6 @@ namespace DataAccess.Entities
         public required double SpecificWorkToSurfaceSeparationJoulPerMeter2 { get; set; }
         public required double CoefficientOfFriction { get; set; }
 
+        public List<OperationsProcess> OperationsProcesses { get; set; } = new List<OperationsProcess>();
     }
 }
