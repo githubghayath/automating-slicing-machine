@@ -131,3 +131,4 @@ C:\Users\shiha_a8q6i0r\Desktop\Fourth Year Project\CuttingProcess\Program\Presen
 C:\Users\shiha_a8q6i0r\Desktop\Fourth Year Project\CuttingProcess\Program\Presentation\obj\Debug\net10.0-windows\Presentation.Properties.Resources.resources
 C:\Users\shiha_a8q6i0r\Desktop\Fourth Year Project\CuttingProcess\Program\Presentation\obj\Debug\net10.0-windows\Presentation.UserControls.ucHistory.resources
 C:\Users\shiha_a8q6i0r\Desktop\Fourth Year Project\CuttingProcess\Program\Presentation\obj\Debug\net10.0-windows\Presentation.UserControls.ucMaintenance.resources
+C:\Users\shiha_a8q6i0r\Desktop\Fourth Year Project\CuttingProcess\Program\Presentation\obj\Debug\net10.0-windows\Presentation.UserControls.ucMachinePerformance.resources

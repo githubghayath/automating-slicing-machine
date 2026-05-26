@@ -7,6 +7,9 @@
     <Compile Update="UserControls\ucHistory.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="UserControls\ucMachinePerformance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="UserControls\ucMaintenance.cs">
       <SubType>UserControl</SubType>
     </Compile>

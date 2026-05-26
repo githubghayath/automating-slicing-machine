@@ -75,6 +75,8 @@
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
             label24 = new Label();
             pnlHeader = new Panel();
+            label19 = new Label();
+            label36 = new Label();
             btnStartMachine = new Button();
             btnStopMachine = new Button();
             label2 = new Label();
@@ -393,7 +395,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 9F);
-            label7.Location = new Point(180, 101);
+            label7.Location = new Point(172, 178);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(169, 20);
@@ -404,7 +406,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F);
-            label16.Location = new Point(54, 129);
+            label16.Location = new Point(46, 207);
             label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
             label16.Size = new Size(295, 20);
@@ -425,7 +427,7 @@
             // 
             // btnCalculateForces
             // 
-            btnCalculateForces.Location = new Point(468, 55);
+            btnCalculateForces.Location = new Point(448, 132);
             btnCalculateForces.Margin = new Padding(4, 5, 4, 5);
             btnCalculateForces.Name = "btnCalculateForces";
             btnCalculateForces.Size = new Size(151, 37);
@@ -535,6 +537,7 @@
             label17.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            label17.ForeColor = Color.FromArgb(224, 92, 26);
             label17.Location = new Point(40, 21);
             label17.Margin = new Padding(4, 0, 4, 0);
             label17.Name = "label17";
@@ -547,6 +550,7 @@
             label21.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label21.AutoSize = true;
             label21.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label21.ForeColor = Color.FromArgb(224, 92, 26);
             label21.Location = new Point(633, 21);
             label21.Margin = new Padding(4, 0, 4, 0);
             label21.Name = "label21";
@@ -558,6 +562,7 @@
             // 
             label22.AutoSize = true;
             label22.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
+            label22.ForeColor = Color.FromArgb(224, 92, 26);
             label22.Location = new Point(1254, 21);
             label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
@@ -570,7 +575,7 @@
             lblCoefficientOfFriction.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblCoefficientOfFriction.AutoSize = true;
             lblCoefficientOfFriction.Font = new Font("Segoe UI", 9F);
-            lblCoefficientOfFriction.Location = new Point(351, 162);
+            lblCoefficientOfFriction.Location = new Point(339, 236);
             lblCoefficientOfFriction.Margin = new Padding(4, 0, 4, 0);
             lblCoefficientOfFriction.Name = "lblCoefficientOfFriction";
             lblCoefficientOfFriction.Size = new Size(46, 20);
@@ -581,7 +586,7 @@
             // 
             lblCuttingForceAsAFunction.AutoSize = true;
             lblCuttingForceAsAFunction.Font = new Font("Segoe UI", 9F);
-            lblCuttingForceAsAFunction.Location = new Point(351, 185);
+            lblCuttingForceAsAFunction.Location = new Point(712, 401);
             lblCuttingForceAsAFunction.Margin = new Padding(4, 0, 4, 0);
             lblCuttingForceAsAFunction.Name = "lblCuttingForceAsAFunction";
             lblCuttingForceAsAFunction.Size = new Size(46, 20);
@@ -591,19 +596,21 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Font = new Font("Segoe UI", 9F);
-            label25.Location = new Point(159, 185);
+            label25.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label25.ForeColor = Color.FromArgb(224, 92, 26);
+            label25.Location = new Point(669, 401);
             label25.Margin = new Padding(4, 0, 4, 0);
             label25.Name = "label25";
-            label25.Size = new Size(190, 20);
+            label25.Size = new Size(51, 20);
             label25.TabIndex = 51;
-            label25.Text = "Cutting force as a function: ";
+            label25.Text = "Fc​(h): ";
             // 
             // formsPlot1
             // 
             formsPlot1.Anchor = AnchorStyles.Top;
+            formsPlot1.ForeColor = Color.FromArgb(78, 110, 129);
             formsPlot1.ImeMode = ImeMode.NoControl;
-            formsPlot1.Location = new Point(666, 26);
+            formsPlot1.Location = new Point(669, 26);
             formsPlot1.Margin = new Padding(3, 4, 3, 4);
             formsPlot1.Name = "formsPlot1";
             formsPlot1.Size = new Size(444, 356);
@@ -614,7 +621,7 @@
             label24.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F);
-            label24.Location = new Point(192, 162);
+            label24.Location = new Point(184, 236);
             label24.Margin = new Padding(4, 0, 4, 0);
             label24.Name = "label24";
             label24.Size = new Size(157, 20);
@@ -623,6 +630,8 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(label19);
+            pnlHeader.Controls.Add(label36);
             pnlHeader.Controls.Add(btnStartMachine);
             pnlHeader.Controls.Add(btnStopMachine);
             pnlHeader.Controls.Add(label2);
@@ -651,13 +660,36 @@
             pnlHeader.Size = new Size(1584, 477);
             pnlHeader.TabIndex = 56;
             // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label19.ForeColor = Color.FromArgb(224, 92, 26);
+            label19.Location = new Point(40, 456);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(241, 20);
+            label19.TabIndex = 73;
+            label19.Text = "Force components for each angle:";
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Font = new Font("Segoe UI Semibold", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label36.ForeColor = Color.FromArgb(224, 92, 26);
+            label36.Location = new Point(10, 9);
+            label36.Name = "label36";
+            label36.Size = new Size(266, 60);
+            label36.TabIndex = 72;
+            label36.Text = "Home Panel";
+            // 
             // btnStartMachine
             // 
             btnStartMachine.FlatAppearance.BorderSize = 0;
             btnStartMachine.FlatStyle = FlatStyle.System;
             btnStartMachine.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnStartMachine.ForeColor = SystemColors.ButtonFace;
-            btnStartMachine.Location = new Point(443, 101);
+            btnStartMachine.Location = new Point(383, 38);
             btnStartMachine.Name = "btnStartMachine";
             btnStartMachine.Size = new Size(116, 31);
             btnStartMachine.TabIndex = 68;
@@ -672,7 +704,7 @@
             btnStopMachine.FlatStyle = FlatStyle.System;
             btnStopMachine.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnStopMachine.ForeColor = SystemColors.ButtonFace;
-            btnStopMachine.Location = new Point(443, 142);
+            btnStopMachine.Location = new Point(505, 38);
             btnStopMachine.Name = "btnStopMachine";
             btnStopMachine.Size = new Size(116, 31);
             btnStopMachine.TabIndex = 69;
@@ -684,29 +716,31 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 9F);
-            label2.Location = new Point(46, 287);
+            label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label2.ForeColor = Color.FromArgb(224, 92, 26);
+            label2.Location = new Point(40, 268);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(278, 20);
+            label2.Size = new Size(288, 20);
             label2.TabIndex = 70;
             label2.Text = "The angles of teeth shared in the cutting:";
             // 
             // pnlAnglesWithThickness
             // 
-            pnlAnglesWithThickness.Location = new Point(43, 309);
+            pnlAnglesWithThickness.Location = new Point(40, 290);
             pnlAnglesWithThickness.Name = "pnlAnglesWithThickness";
-            pnlAnglesWithThickness.Size = new Size(576, 160);
+            pnlAnglesWithThickness.Size = new Size(576, 152);
             pnlAnglesWithThickness.TabIndex = 66;
             // 
             // label23
             // 
             label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 9F);
-            label23.Location = new Point(71, 36);
+            label23.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label23.ForeColor = Color.FromArgb(224, 92, 26);
+            label23.Location = new Point(46, 113);
             label23.Margin = new Padding(4, 0, 4, 0);
             label23.Name = "label23";
-            label23.Size = new Size(226, 20);
+            label23.Size = new Size(230, 20);
             label23.TabIndex = 61;
             label23.Text = "Choose type of wood to process:";
             // 
@@ -714,7 +748,7 @@
             // 
             lblSpecificWorkToSurfaceSeparation.AutoSize = true;
             lblSpecificWorkToSurfaceSeparation.Font = new Font("Segoe UI", 9F);
-            lblSpecificWorkToSurfaceSeparation.Location = new Point(351, 129);
+            lblSpecificWorkToSurfaceSeparation.Location = new Point(339, 207);
             lblSpecificWorkToSurfaceSeparation.Margin = new Padding(4, 0, 4, 0);
             lblSpecificWorkToSurfaceSeparation.Name = "lblSpecificWorkToSurfaceSeparation";
             lblSpecificWorkToSurfaceSeparation.Size = new Size(46, 20);
@@ -725,7 +759,7 @@
             // 
             lblShearYieldStress.AutoSize = true;
             lblShearYieldStress.Font = new Font("Segoe UI", 9F);
-            lblShearYieldStress.Location = new Point(351, 101);
+            lblShearYieldStress.Location = new Point(339, 178);
             lblShearYieldStress.Margin = new Padding(4, 0, 4, 0);
             lblShearYieldStress.Name = "lblShearYieldStress";
             lblShearYieldStress.Size = new Size(46, 20);
@@ -735,6 +769,7 @@
             // formsPlot2
             // 
             formsPlot2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            formsPlot2.ForeColor = Color.FromArgb(78, 110, 129);
             formsPlot2.ImeMode = ImeMode.NoControl;
             formsPlot2.Location = new Point(1125, 26);
             formsPlot2.Margin = new Padding(3, 4, 3, 4);
@@ -746,7 +781,7 @@
             // 
             lblSheftTorquAsFunction.AutoSize = true;
             lblSheftTorquAsFunction.Font = new Font("Segoe UI", 9F);
-            lblSheftTorquAsFunction.Location = new Point(351, 213);
+            lblSheftTorquAsFunction.Location = new Point(1164, 401);
             lblSheftTorquAsFunction.Margin = new Padding(4, 0, 4, 0);
             lblSheftTorquAsFunction.Name = "lblSheftTorquAsFunction";
             lblSheftTorquAsFunction.Size = new Size(46, 20);
@@ -756,19 +791,20 @@
             // label27
             // 
             label27.AutoSize = true;
-            label27.Font = new Font("Segoe UI", 9F);
-            label27.Location = new Point(171, 213);
+            label27.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label27.ForeColor = Color.FromArgb(224, 92, 26);
+            label27.Location = new Point(1125, 401);
             label27.Margin = new Padding(4, 0, 4, 0);
             label27.Name = "label27";
-            label27.Size = new Size(178, 20);
+            label27.Size = new Size(40, 20);
             label27.TabIndex = 56;
-            label27.Text = "Sheft torqu as a function: ";
+            label27.Text = "T(h):";
             // 
             // lblMaxSheftsTorque
             // 
             lblMaxSheftsTorque.AutoSize = true;
             lblMaxSheftsTorque.Font = new Font("Segoe UI", 9F);
-            lblMaxSheftsTorque.Location = new Point(351, 241);
+            lblMaxSheftsTorque.Location = new Point(1254, 430);
             lblMaxSheftsTorque.Margin = new Padding(4, 0, 4, 0);
             lblMaxSheftsTorque.Name = "lblMaxSheftsTorque";
             lblMaxSheftsTorque.Size = new Size(46, 20);
@@ -778,19 +814,20 @@
             // label26
             // 
             label26.AutoSize = true;
-            label26.Font = new Font("Segoe UI", 9F);
-            label26.Location = new Point(71, 241);
+            label26.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            label26.ForeColor = Color.FromArgb(224, 92, 26);
+            label26.Location = new Point(1125, 429);
             label26.Margin = new Padding(4, 0, 4, 0);
             label26.Name = "label26";
-            label26.Size = new Size(278, 20);
+            label26.Size = new Size(143, 20);
             label26.TabIndex = 54;
-            label26.Text = "The shefts must rotate with torqu [N/m]: ";
+            label26.Text = "sheft torque [N.m]: ";
             // 
             // cbWoodType
             // 
             cbWoodType.FormattingEnabled = true;
             cbWoodType.Items.AddRange(new object[] { "Select Wood Type" });
-            cbWoodType.Location = new Point(71, 60);
+            cbWoodType.Location = new Point(46, 137);
             cbWoodType.Margin = new Padding(3, 4, 3, 4);
             cbWoodType.Name = "cbWoodType";
             cbWoodType.Size = new Size(390, 28);
@@ -1215,6 +1252,8 @@
         private Button btnProcessHistory;
         private Label label3;
         private Button button1;
+        private Label label36;
+        private Label label19;
     }
 }
 

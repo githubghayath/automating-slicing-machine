@@ -38,15 +38,14 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             InitializeDataGridView();
-            _InitializeMachinePerformancePanel();
+            _IntializeMachinePerformancePage();
             _IntializeHistoryPage();
             _IntializeMaintenancePage();
         }
-        private ScottPlot.WinForms.FormsPlot formsPlot1MachinePerformance;
-        private ScottPlot.WinForms.FormsPlot formsPlot2MachinePerformance;
         private Panel pnlMachinePerformence;
         private Panel pnlHistoryPage;
         private Panel pnlMaintenancePage;
+        private ucMachinePerformance MachinePerformanceControl;
 
 
         private DataGridView dgvForces;
@@ -223,7 +222,6 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             _FullComboBoxWithWoodTypes();
-            _IntializingPerformanceCharts();
             pnlCalculationPage.Controls.Add(pnlHeader);
             pnlCalculationPage.Controls.Add(pnlForceValues);
             pnlCalculationPage.Controls.Add(pnlBody);
@@ -338,7 +336,8 @@ namespace WindowsFormsApp1
             scatter.MarkerSize = 3;
 
             formsPlot1.Plot.Title("Cutting Force vs Chip Thickness");
-            formsPlot1.Plot.XLabel("Chip Thickness (µm)");
+            formsPlot1.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlot1.Plot.XLabel("Chip Thickness (µm)");         
             formsPlot1.Plot.YLabel("Cutting Force per Tooth (N)");
 
             formsPlot1.Plot.Axes.SetLimits(
@@ -385,7 +384,8 @@ namespace WindowsFormsApp1
             scatter.MarkerSize = 3;
 
             formsPlot2.Plot.Title("Sheft moment vs Chip Thickness");
-            formsPlot2.Plot.XLabel("Chip Thickness (µm)");
+            formsPlot2.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81"); 
+            formsPlot2.Plot.XLabel("Chip Thickness (µm)");   
             formsPlot2.Plot.YLabel("Moment per Tooth (N/m)");
 
             formsPlot2.Plot.Axes.SetLimits(
@@ -442,15 +442,7 @@ namespace WindowsFormsApp1
 
         }
 
-        private void btnLiveChart_Click(object sender, EventArgs e)
-        {
-            var MechinePerformance = new frmMachinePerformance();
-            MechinePerformance.ShowDialog();
-        }
-
-
-
-
+    
 
         private void btnStartMachine_Click(object sender, EventArgs e)
         {
@@ -461,147 +453,16 @@ namespace WindowsFormsApp1
         }
 
 
-        private void _IntializingPerformanceCharts()
-        {
-            xs = Enumerable.Range(0, plotData.Length)
-                          .Select(i => i * dt)
-                          .ToArray();
-
-            signal = formsPlot1MachinePerformance.Plot.Add.SignalXY(xs, plotData);
-
-            signal.LineWidth = 3;
-            signal.Color = ScottPlot.Colors.BurlyWood;
-
-            formsPlot1MachinePerformance.Plot.Title("Simulated Shaft Torque vs Time");
-            formsPlot1MachinePerformance.Plot.XLabel("Time (s)");
-            formsPlot1MachinePerformance.Plot.YLabel("Torque (Nm)");
-
-            // =========================
-            // NEW: Production chart
-            // =========================
-
-            prodXs = Enumerable.Range(0, prodPlotData.Length)
-                               .Select(i => i * dt)
-                               .ToArray();
-            prodSignal = formsPlot2MachinePerformance.Plot.Add.SignalXY(prodXs, prodPlotData);
-
-            prodSignal.LineWidth = 3;
-            prodSignal.Color = ScottPlot.Colors.DodgerBlue;
-
-            formsPlot2MachinePerformance.Plot.Title("Cumulative Wood Production Over Time");
-            formsPlot2MachinePerformance.Plot.XLabel("Time (s)");
-            formsPlot2MachinePerformance.Plot.YLabel("Volume (m³)");
-
-
-            formsPlot2MachinePerformance.Refresh();
-            formsPlot1MachinePerformance.Refresh();
-        }
-
-        double[] buffer = new double[100];   // circular buffer
-        double[] plotData = new double[100]; // ordered data for plotting
-        double[] xs;
-
-        int index = 0;
-
-        Random rand = new Random();
-        double t = 0;
-        double dt = 0.05;
-
-        SignalXY signal;
-
-        double[] prodBuffer = new double[200];
-        double[] prodPlotData = new double[200];
-        double[] prodXs;
-
-        double prodIndex = 0;
-        double prodTime = 0;
 
         double feedSpeed = 11.0 / 60.0; // m/s
-        double area = 0.2 * 0.03;       // m²
 
-        SignalXY prodSignal;
 
+        int TimerValueInMilleSecond = 0;
         private void timer1_Tick(object sender, EventArgs e)
         {
-            // === 1. Generate new torque value ===
-            double baseTorque = 50;
-            double oscillation = 10 * Math.Sin(t);
-            double noise = rand.NextDouble() * 2 - 1;
+            TimerValueInMilleSecond += timer1.Interval;
+            MachinePerformanceControl.LiveChart(feedSpeed / 60);
 
-            double torque = baseTorque + oscillation + noise;
-
-            // === 5. Update X-axis (SCROLLING WINDOW) ===
-            double windowSize = xs.Length * dt;
-
-            double xMax = xs[xs.Length - 1];
-            double xMin = xMax - windowSize;
-
-            formsPlot1MachinePerformance.Plot.Axes.SetLimitsX(xMin, xMax);
-
-
-
-            // === 2. Insert into circular buffer ===
-            buffer[index] = torque;
-
-            index = (index + 1) % buffer.Length;
-
-            t += dt;
-
-            // === 3. Rebuild ordered array (for plotting) ===
-            int j = 0;
-
-            for (int i = index; i < buffer.Length; i++)
-                plotData[j++] = buffer[i];
-
-            for (int i = 0; i < index; i++)
-                plotData[j++] = buffer[i];
-
-            // === 4. Update X axis (time sliding window) ===
-            for (int i = 0; i < xs.Length - 1; i++)
-                xs[i] = xs[i + 1];
-
-            xs[xs.Length - 1] = xs[xs.Length - 2] + dt;
-
-            // === 5. Refresh plot ===
-            formsPlot1MachinePerformance.Plot.Axes.AutoScaleY(); // smoother than full autoscale
-
-
-            // ======================================================
-            // NEW SECTION: PRODUCTION CHART (formsPlot2)
-            // ======================================================
-
-            double speedNoise = (rand.NextDouble() - 0.5) * 0.02;
-            double currentSpeed = feedSpeed + speedNoise;
-
-            double rate = currentSpeed * area; // m³/s
-
-            prodBuffer[(int)prodIndex] += rate * dt;
-
-            prodIndex = (prodIndex + 1) % prodBuffer.Length;
-
-            prodTime += dt;
-
-            // reorder production buffer
-            int k = 0;
-
-            for (int i = (int)prodIndex; i < prodBuffer.Length; i++)
-                prodPlotData[k++] = prodBuffer[i];
-
-            for (int i = 0; i < prodIndex; i++)
-                prodPlotData[k++] = prodBuffer[i];
-
-            // prodSignal.Data = prodPlotData;
-
-            double prodWindow = prodXs.Length * dt;
-            double prodXMax = prodTime;
-            double prodXMin = prodXMax - prodWindow;
-
-            formsPlot2MachinePerformance.Plot.Axes.SetLimitsX(prodXMin, prodXMax);
-
-            formsPlot2MachinePerformance.Plot.Axes.AutoScaleY();
-
-            formsPlot1MachinePerformance.Refresh();
-            formsPlot2MachinePerformance.Refresh();
         }
 
         private void btnMachinePerformance_Click(object sender, EventArgs e)
@@ -648,53 +509,20 @@ namespace WindowsFormsApp1
 
         }
 
-        private void _InitializeMachinePerformancePanel()
+        private void _IntializeMachinePerformancePage()
         {
-            // =========================
-            // Create Main Panel
-            // =========================
             pnlMachinePerformence = new Panel();
+            MachinePerformanceControl = new ucMachinePerformance();
 
             pnlMachinePerformence.Name = "pnlMachinePerformence";
+            pnlMachinePerformence.Controls.Add(MachinePerformanceControl);
             pnlMachinePerformence.Dock = DockStyle.Fill;
             pnlMachinePerformence.BackColor = SystemColors.Control;
-
-            // Move panel to front in Z-order
-            pnlMachinePerformence.BringToFront();
-
-            // =========================
-            // Create First ScottPlot
-            // =========================
-
-            formsPlot1MachinePerformance = new ScottPlot.WinForms.FormsPlot();
-
-            formsPlot1MachinePerformance.Name = "formsPlot1MachinePerformance";
-            formsPlot1MachinePerformance.Size = new Size(563, 479);
-            formsPlot1MachinePerformance.Location = new Point(51, 36);
-
-            // =========================
-            // Create Second ScottPlot
-            // =========================
-            formsPlot2MachinePerformance = new ScottPlot.WinForms.FormsPlot();
-
-            formsPlot2MachinePerformance.Name = "formsPlot2MachinePerformance";
-            formsPlot2MachinePerformance.Size = new Size(563, 479);
-            formsPlot2MachinePerformance.Location = new Point(772, 36);
-
-            // =========================
-            // Add Charts To Panel
-            // =========================
-            pnlMachinePerformence.Controls.Add(formsPlot2MachinePerformance);
-            pnlMachinePerformence.Controls.Add(formsPlot1MachinePerformance);
-
-            // =========================
-            // Add Panel To Form
-            // =========================
             this.Controls.Add(pnlMachinePerformence);
-
-            // Make sure panel is at front
             pnlMachinePerformence.BringToFront();
         }
+
+    
 
         private void btnStopMachine_Click(object sender, EventArgs e)
         {
