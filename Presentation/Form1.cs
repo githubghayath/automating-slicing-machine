@@ -225,10 +225,9 @@ namespace WindowsFormsApp1
             pnlCalculationPage.Controls.Add(pnlHeader);
             pnlCalculationPage.Controls.Add(pnlForceValues);
             pnlCalculationPage.Controls.Add(pnlBody);
-            pnlCalculationPage.Visible = true;
-            pnlMachinePerformence.Visible = false;
-            pnlHistoryPage.Visible = false;
-            pnlMaintenancePage.Visible = false;
+
+            btnCalculationPage_Click(null, null);
+           
         }
 
         private void btnCalculateForces_Click(object sender, EventArgs e)
@@ -337,7 +336,7 @@ namespace WindowsFormsApp1
 
             formsPlot1.Plot.Title("Cutting Force vs Chip Thickness");
             formsPlot1.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
-            formsPlot1.Plot.XLabel("Chip Thickness (µm)");         
+            formsPlot1.Plot.XLabel("Chip Thickness (µm)");
             formsPlot1.Plot.YLabel("Cutting Force per Tooth (N)");
 
             formsPlot1.Plot.Axes.SetLimits(
@@ -384,8 +383,8 @@ namespace WindowsFormsApp1
             scatter.MarkerSize = 3;
 
             formsPlot2.Plot.Title("Sheft moment vs Chip Thickness");
-            formsPlot2.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81"); 
-            formsPlot2.Plot.XLabel("Chip Thickness (µm)");   
+            formsPlot2.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlot2.Plot.XLabel("Chip Thickness (µm)");
             formsPlot2.Plot.YLabel("Moment per Tooth (N/m)");
 
             formsPlot2.Plot.Axes.SetLimits(
@@ -442,7 +441,7 @@ namespace WindowsFormsApp1
 
         }
 
-    
+
 
         private void btnStartMachine_Click(object sender, EventArgs e)
         {
@@ -461,7 +460,7 @@ namespace WindowsFormsApp1
         private void timer1_Tick(object sender, EventArgs e)
         {
             TimerValueInMilleSecond += timer1.Interval;
-            MachinePerformanceControl.LiveChart(feedSpeed / 60);
+            MachinePerformanceControl.LiveChart(feedRatePerSecond: feedSpeed / 60, TimerValueInMilleSecond);
 
         }
 
@@ -471,6 +470,30 @@ namespace WindowsFormsApp1
             pnlMachinePerformence.Visible = true;
             pnlHistoryPage.Visible = false;
             pnlMaintenancePage.Visible = false;
+
+            _GetDefaultStyle();
+
+            btnMachinePerformance.BackColor = SystemColors.Control;
+            btnMachinePerformance.ForeColor = System.Drawing.Color.FromArgb(23, 70, 62);
+
+        }
+
+        private void _GetDefaultStyle()
+        {
+            btnCalculationPage.BackColor = System.Drawing.Color.FromArgb(23, 70, 62);
+            btnCalculationPage.ForeColor = SystemColors.ButtonFace;
+
+
+            btnMachinePerformance.BackColor = System.Drawing.Color.FromArgb(23, 70, 62);
+            btnMachinePerformance.ForeColor = SystemColors.ButtonFace;
+
+
+            btnProcessHistory.BackColor = System.Drawing.Color.FromArgb(23, 70, 62);
+            btnProcessHistory.ForeColor = SystemColors.ButtonFace;
+
+
+            btnMaintenance.BackColor = System.Drawing.Color.FromArgb(23, 70, 62);
+            btnMaintenance.ForeColor = SystemColors.ButtonFace;
         }
 
         private void btnCalculationPage_Click(object sender, EventArgs e)
@@ -480,18 +503,23 @@ namespace WindowsFormsApp1
             pnlMaintenancePage.Visible = false;
             pnlHistoryPage.Visible = false;
 
+            _GetDefaultStyle();
+
+            btnCalculationPage.BackColor = SystemColors.Control;
+            btnCalculationPage.ForeColor = System.Drawing.Color.FromArgb(23, 70, 62);
+
         }
         private void _IntializeHistoryPage()
         {
             pnlHistoryPage = new Panel();
             var HistoryControl = new ucHistory();
-           
+
             pnlHistoryPage.Name = "pnlHistoryPage";
             pnlHistoryPage.Controls.Add(HistoryControl);
             pnlHistoryPage.Dock = DockStyle.Fill;
             pnlHistoryPage.BackColor = SystemColors.Control;
             this.Controls.Add(pnlHistoryPage);
-            pnlHistoryPage.BringToFront(); 
+            pnlHistoryPage.BringToFront();
 
         }
 
@@ -499,7 +527,7 @@ namespace WindowsFormsApp1
         {
             pnlMaintenancePage = new Panel();
             var MaintenanceControl = new ucMaintenance();
-          
+
             pnlMaintenancePage.Name = "pnlMaintenancePage";
             pnlMaintenancePage.Controls.Add(MaintenanceControl);
             pnlMaintenancePage.Dock = DockStyle.Fill;
@@ -522,7 +550,7 @@ namespace WindowsFormsApp1
             pnlMachinePerformence.BringToFront();
         }
 
-    
+
 
         private void btnStopMachine_Click(object sender, EventArgs e)
         {
@@ -539,17 +567,28 @@ namespace WindowsFormsApp1
             pnlMachinePerformence.Visible = false;
             pnlMaintenancePage.Visible = false;
             pnlHistoryPage.Visible = true;
-           
+
+
+            _GetDefaultStyle();
+
+            btnProcessHistory.BackColor = SystemColors.Control;
+            btnProcessHistory.ForeColor = System.Drawing.Color.FromArgb(23, 70, 62);
+
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnMaintenance_Click(object sender, EventArgs e)
         {
             pnlCalculationPage.Visible = false;
             pnlMachinePerformence.Visible = false;
             pnlHistoryPage.Visible = false;
             pnlMaintenancePage.Visible = true;
+
+
+            _GetDefaultStyle();
+
+            btnMaintenance.BackColor = SystemColors.Control;
+            btnMaintenance.ForeColor = System.Drawing.Color.FromArgb(23, 70, 62);
         }
-
-
     }
 }

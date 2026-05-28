@@ -52,6 +52,9 @@
             pictureBox2 = new PictureBox();
             label4 = new Label();
             formsPlot2 = new ScottPlot.WinForms.FormsPlot();
+            label38 = new Label();
+            label5 = new Label();
+            label9 = new Label();
             pnlHistoryTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvHistory).BeginInit();
             contextMenuStrip1.SuspendLayout();
@@ -87,6 +90,8 @@
             dgvHistory.AllowUserToAddRows = false;
             dgvHistory.AllowUserToDeleteRows = false;
             dgvHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvHistory.BorderStyle = BorderStyle.None;
+            dgvHistory.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dgvHistory.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvHistory.ContextMenuStrip = contextMenuStrip1;
             dgvHistory.Dock = DockStyle.Fill;
@@ -117,7 +122,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(224, 92, 26);
-            label1.Location = new Point(7, 10);
+            label1.Location = new Point(18, 10);
             label1.Name = "label1";
             label1.Size = new Size(291, 60);
             label1.TabIndex = 2;
@@ -290,10 +295,38 @@
             // formsPlot2
             // 
             formsPlot2.BackColor = Color.Transparent;
-            formsPlot2.Location = new Point(37, 319);
+            formsPlot2.Location = new Point(37, 311);
             formsPlot2.Name = "formsPlot2";
             formsPlot2.Size = new Size(816, 169);
             formsPlot2.TabIndex = 8;
+            // 
+            // label38
+            // 
+            label38.BackColor = Color.FromArgb(224, 92, 26);
+            label38.Location = new Point(8, 9);
+            label38.Name = "label38";
+            label38.Size = new Size(13, 60);
+            label38.TabIndex = 79;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label5.ForeColor = Color.FromArgb(224, 92, 26);
+            label5.Location = new Point(38, 430);
+            label5.Name = "label5";
+            label5.Size = new Size(170, 23);
+            label5.TabIndex = 14;
+            label5.Text = "Archived Operations:";
+            label5.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label9
+            // 
+            label9.BackColor = Color.FromArgb(224, 92, 26);
+            label9.Location = new Point(33, 430);
+            label9.Name = "label9";
+            label9.Size = new Size(5, 23);
+            label9.TabIndex = 80;
             // 
             // ucHistory
             // 
@@ -301,6 +334,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             Controls.Add(formsPlot2);
+            Controls.Add(label38);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
@@ -308,6 +342,8 @@
             Controls.Add(label1);
             Controls.Add(pnlHistoryTable);
             Controls.Add(lblEmptyText);
+            Controls.Add(label9);
+            Controls.Add(label5);
             Name = "ucHistory";
             Size = new Size(1584, 918);
             Load += ucHistory_Load;
@@ -352,5 +388,8 @@
         private Label label8;
         private Label lblProductionVolume;
         private ScottPlot.WinForms.FormsPlot formsPlot2;
+        private Label label38;
+        private Label label5;
+        private Label label9;
     }
 }

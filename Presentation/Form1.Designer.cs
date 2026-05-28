@@ -75,6 +75,7 @@
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
             label24 = new Label();
             pnlHeader = new Panel();
+            label38 = new Label();
             label19 = new Label();
             label36 = new Label();
             btnStartMachine = new Button();
@@ -102,7 +103,7 @@
             lblNumberOfBlades = new Label();
             label28 = new Label();
             pnlSideBar = new Panel();
-            button1 = new Button();
+            btnMaintenance = new Button();
             label3 = new Label();
             pnlForceValues = new Panel();
             btnProcessHistory = new Button();
@@ -122,7 +123,7 @@
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 8F);
-            label1.Location = new Point(627, 56);
+            label1.Location = new Point(672, 56);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(144, 19);
@@ -134,7 +135,7 @@
             lblFeedVelocity.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblFeedVelocity.AutoSize = true;
             lblFeedVelocity.Font = new Font("Segoe UI", 8F);
-            lblFeedVelocity.Location = new Point(767, 56);
+            lblFeedVelocity.Location = new Point(812, 56);
             lblFeedVelocity.Margin = new Padding(4, 0, 4, 0);
             lblFeedVelocity.Name = "lblFeedVelocity";
             lblFeedVelocity.Size = new Size(41, 19);
@@ -146,7 +147,7 @@
             label5.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 8F);
-            label5.Location = new Point(610, 79);
+            label5.Location = new Point(655, 79);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(161, 19);
@@ -158,7 +159,7 @@
             lblMaxCuttingVelocity.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblMaxCuttingVelocity.AutoSize = true;
             lblMaxCuttingVelocity.Font = new Font("Segoe UI", 8F);
-            lblMaxCuttingVelocity.Location = new Point(767, 79);
+            lblMaxCuttingVelocity.Location = new Point(812, 79);
             lblMaxCuttingVelocity.Margin = new Padding(4, 0, 4, 0);
             lblMaxCuttingVelocity.Name = "lblMaxCuttingVelocity";
             lblMaxCuttingVelocity.Size = new Size(41, 19);
@@ -170,7 +171,7 @@
             lblFeedPerTeeth.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblFeedPerTeeth.AutoSize = true;
             lblFeedPerTeeth.Font = new Font("Segoe UI", 8F);
-            lblFeedPerTeeth.Location = new Point(767, 102);
+            lblFeedPerTeeth.Location = new Point(812, 102);
             lblFeedPerTeeth.Margin = new Padding(4, 0, 4, 0);
             lblFeedPerTeeth.Name = "lblFeedPerTeeth";
             lblFeedPerTeeth.Size = new Size(41, 19);
@@ -182,7 +183,7 @@
             label4.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 8F);
-            label4.Location = new Point(607, 102);
+            label4.Location = new Point(652, 102);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(164, 19);
@@ -194,7 +195,7 @@
             lblNumberOfRotations.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblNumberOfRotations.AutoSize = true;
             lblNumberOfRotations.Font = new Font("Segoe UI", 8F);
-            lblNumberOfRotations.Location = new Point(767, 125);
+            lblNumberOfRotations.Location = new Point(812, 125);
             lblNumberOfRotations.Margin = new Padding(4, 0, 4, 0);
             lblNumberOfRotations.Name = "lblNumberOfRotations";
             lblNumberOfRotations.Size = new Size(41, 19);
@@ -206,7 +207,7 @@
             label6.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 8F);
-            label6.Location = new Point(593, 125);
+            label6.Location = new Point(638, 125);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(178, 19);
@@ -406,7 +407,7 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F);
-            label16.Location = new Point(46, 207);
+            label16.Location = new Point(46, 204);
             label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
             label16.Size = new Size(295, 20);
@@ -513,7 +514,7 @@
             lblNumberOfTeethInvolvedInCutting.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblNumberOfTeethInvolvedInCutting.AutoSize = true;
             lblNumberOfTeethInvolvedInCutting.Font = new Font("Segoe UI", 8F);
-            lblNumberOfTeethInvolvedInCutting.Location = new Point(831, 194);
+            lblNumberOfTeethInvolvedInCutting.Location = new Point(876, 194);
             lblNumberOfTeethInvolvedInCutting.Margin = new Padding(4, 0, 4, 0);
             lblNumberOfTeethInvolvedInCutting.Name = "lblNumberOfTeethInvolvedInCutting";
             lblNumberOfTeethInvolvedInCutting.Size = new Size(41, 19);
@@ -525,7 +526,7 @@
             label18.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 8F);
-            label18.Location = new Point(550, 194);
+            label18.Location = new Point(595, 194);
             label18.Margin = new Padding(4, 0, 4, 0);
             label18.Name = "label18";
             label18.Size = new Size(285, 19);
@@ -551,7 +552,7 @@
             label21.AutoSize = true;
             label21.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label21.ForeColor = Color.FromArgb(224, 92, 26);
-            label21.Location = new Point(633, 21);
+            label21.Location = new Point(678, 21);
             label21.Margin = new Padding(4, 0, 4, 0);
             label21.Name = "label21";
             label21.Size = new Size(201, 23);
@@ -575,7 +576,7 @@
             lblCoefficientOfFriction.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblCoefficientOfFriction.AutoSize = true;
             lblCoefficientOfFriction.Font = new Font("Segoe UI", 9F);
-            lblCoefficientOfFriction.Location = new Point(339, 236);
+            lblCoefficientOfFriction.Location = new Point(339, 230);
             lblCoefficientOfFriction.Margin = new Padding(4, 0, 4, 0);
             lblCoefficientOfFriction.Name = "lblCoefficientOfFriction";
             lblCoefficientOfFriction.Size = new Size(46, 20);
@@ -621,7 +622,7 @@
             label24.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label24.AutoSize = true;
             label24.Font = new Font("Segoe UI", 9F);
-            label24.Location = new Point(184, 236);
+            label24.Location = new Point(184, 230);
             label24.Margin = new Padding(4, 0, 4, 0);
             label24.Name = "label24";
             label24.Size = new Size(157, 20);
@@ -630,6 +631,7 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(label38);
             pnlHeader.Controls.Add(label19);
             pnlHeader.Controls.Add(label36);
             pnlHeader.Controls.Add(btnStartMachine);
@@ -660,6 +662,14 @@
             pnlHeader.Size = new Size(1584, 477);
             pnlHeader.TabIndex = 56;
             // 
+            // label38
+            // 
+            label38.BackColor = Color.FromArgb(224, 92, 26);
+            label38.Location = new Point(8, 9);
+            label38.Name = "label38";
+            label38.Size = new Size(13, 60);
+            label38.TabIndex = 78;
+            // 
             // label19
             // 
             label19.AutoSize = true;
@@ -677,7 +687,7 @@
             label36.AutoSize = true;
             label36.Font = new Font("Segoe UI Semibold", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label36.ForeColor = Color.FromArgb(224, 92, 26);
-            label36.Location = new Point(10, 9);
+            label36.Location = new Point(17, 9);
             label36.Name = "label36";
             label36.Size = new Size(266, 60);
             label36.TabIndex = 72;
@@ -748,7 +758,7 @@
             // 
             lblSpecificWorkToSurfaceSeparation.AutoSize = true;
             lblSpecificWorkToSurfaceSeparation.Font = new Font("Segoe UI", 9F);
-            lblSpecificWorkToSurfaceSeparation.Location = new Point(339, 207);
+            lblSpecificWorkToSurfaceSeparation.Location = new Point(339, 204);
             lblSpecificWorkToSurfaceSeparation.Margin = new Padding(4, 0, 4, 0);
             lblSpecificWorkToSurfaceSeparation.Name = "lblSpecificWorkToSurfaceSeparation";
             lblSpecificWorkToSurfaceSeparation.Size = new Size(46, 20);
@@ -839,7 +849,7 @@
             lblVolumetricProductionRateMeter3Hour.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblVolumetricProductionRateMeter3Hour.AutoSize = true;
             lblVolumetricProductionRateMeter3Hour.Font = new Font("Segoe UI", 8F);
-            lblVolumetricProductionRateMeter3Hour.Location = new Point(767, 171);
+            lblVolumetricProductionRateMeter3Hour.Location = new Point(812, 171);
             lblVolumetricProductionRateMeter3Hour.Margin = new Padding(4, 0, 4, 0);
             lblVolumetricProductionRateMeter3Hour.Name = "lblVolumetricProductionRateMeter3Hour";
             lblVolumetricProductionRateMeter3Hour.Size = new Size(41, 19);
@@ -851,7 +861,7 @@
             label20.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 8F);
-            label20.Location = new Point(529, 171);
+            label20.Location = new Point(574, 171);
             label20.Margin = new Padding(4, 0, 4, 0);
             label20.Name = "label20";
             label20.Size = new Size(242, 19);
@@ -947,7 +957,7 @@
             lblNumberOfBlades.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblNumberOfBlades.AutoSize = true;
             lblNumberOfBlades.Font = new Font("Segoe UI", 8F);
-            lblNumberOfBlades.Location = new Point(767, 148);
+            lblNumberOfBlades.Location = new Point(812, 148);
             lblNumberOfBlades.Margin = new Padding(4, 0, 4, 0);
             lblNumberOfBlades.Name = "lblNumberOfBlades";
             lblNumberOfBlades.Size = new Size(41, 19);
@@ -959,7 +969,7 @@
             label28.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             label28.AutoSize = true;
             label28.Font = new Font("Segoe UI", 8F);
-            label28.Location = new Point(646, 148);
+            label28.Location = new Point(691, 148);
             label28.Margin = new Padding(4, 0, 4, 0);
             label28.Name = "label28";
             label28.Size = new Size(125, 19);
@@ -969,8 +979,7 @@
             // pnlSideBar
             // 
             pnlSideBar.BackColor = Color.FromArgb(23, 70, 62);
-            pnlSideBar.BorderStyle = BorderStyle.FixedSingle;
-            pnlSideBar.Controls.Add(button1);
+            pnlSideBar.Controls.Add(btnMaintenance);
             pnlSideBar.Controls.Add(label3);
             pnlSideBar.Controls.Add(pnlForceValues);
             pnlSideBar.Controls.Add(btnProcessHistory);
@@ -979,31 +988,32 @@
             pnlSideBar.Dock = DockStyle.Left;
             pnlSideBar.Location = new Point(0, 0);
             pnlSideBar.Name = "pnlSideBar";
+            pnlSideBar.Padding = new Padding(0, 90, 0, 0);
             pnlSideBar.Size = new Size(118, 918);
             pnlSideBar.TabIndex = 68;
             // 
-            // button1
+            // btnMaintenance
             // 
-            button1.Dock = DockStyle.Top;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Segoe UI", 9F);
-            button1.ForeColor = SystemColors.ButtonFace;
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.Location = new Point(0, 261);
-            button1.Name = "button1";
-            button1.Size = new Size(116, 87);
-            button1.TabIndex = 72;
-            button1.Text = "Maintenance";
-            button1.TextAlign = ContentAlignment.BottomCenter;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnMaintenance.Dock = DockStyle.Top;
+            btnMaintenance.FlatAppearance.BorderSize = 0;
+            btnMaintenance.FlatStyle = FlatStyle.Flat;
+            btnMaintenance.Font = new Font("Segoe UI", 9F);
+            btnMaintenance.ForeColor = SystemColors.ButtonFace;
+            btnMaintenance.Image = (Image)resources.GetObject("btnMaintenance.Image");
+            btnMaintenance.Location = new Point(0, 351);
+            btnMaintenance.Name = "btnMaintenance";
+            btnMaintenance.Size = new Size(118, 87);
+            btnMaintenance.TabIndex = 72;
+            btnMaintenance.Text = "Maintenance";
+            btnMaintenance.TextAlign = ContentAlignment.BottomCenter;
+            btnMaintenance.UseVisualStyleBackColor = true;
+            btnMaintenance.Click += btnMaintenance_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.ForeColor = SystemColors.ButtonHighlight;
-            label3.Location = new Point(7, 888);
+            label3.Location = new Point(7, 890);
             label3.Name = "label3";
             label3.Size = new Size(103, 20);
             label3.TabIndex = 71;
@@ -1024,9 +1034,9 @@
             btnProcessHistory.Font = new Font("Segoe UI", 9F);
             btnProcessHistory.ForeColor = SystemColors.ButtonFace;
             btnProcessHistory.Image = Presentation.Properties.Resources.history_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnProcessHistory.Location = new Point(0, 174);
+            btnProcessHistory.Location = new Point(0, 264);
             btnProcessHistory.Name = "btnProcessHistory";
-            btnProcessHistory.Size = new Size(116, 87);
+            btnProcessHistory.Size = new Size(118, 87);
             btnProcessHistory.TabIndex = 71;
             btnProcessHistory.Text = "History";
             btnProcessHistory.TextAlign = ContentAlignment.BottomCenter;
@@ -1041,9 +1051,9 @@
             btnMachinePerformance.Font = new Font("Segoe UI", 9F);
             btnMachinePerformance.ForeColor = SystemColors.ButtonFace;
             btnMachinePerformance.Image = Presentation.Properties.Resources.ssid_chart_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnMachinePerformance.Location = new Point(0, 87);
+            btnMachinePerformance.Location = new Point(0, 177);
             btnMachinePerformance.Name = "btnMachinePerformance";
-            btnMachinePerformance.Size = new Size(116, 87);
+            btnMachinePerformance.Size = new Size(118, 87);
             btnMachinePerformance.TabIndex = 68;
             btnMachinePerformance.Text = "Charts";
             btnMachinePerformance.TextAlign = ContentAlignment.BottomCenter;
@@ -1058,9 +1068,9 @@
             btnCalculationPage.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCalculationPage.ForeColor = SystemColors.ButtonFace;
             btnCalculationPage.Image = Presentation.Properties.Resources.home_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnCalculationPage.Location = new Point(0, 0);
+            btnCalculationPage.Location = new Point(0, 90);
             btnCalculationPage.Name = "btnCalculationPage";
-            btnCalculationPage.Size = new Size(116, 87);
+            btnCalculationPage.Size = new Size(118, 87);
             btnCalculationPage.TabIndex = 68;
             btnCalculationPage.Text = "Home";
             btnCalculationPage.TextAlign = ContentAlignment.BottomCenter;
@@ -1251,9 +1261,10 @@
         private Label label2;
         private Button btnProcessHistory;
         private Label label3;
-        private Button button1;
+        private Button btnMaintenance;
         private Label label36;
         private Label label19;
+        private Label label38;
     }
 }
 

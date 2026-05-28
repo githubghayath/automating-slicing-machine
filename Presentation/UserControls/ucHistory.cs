@@ -408,6 +408,8 @@ namespace Presentation.UserControls
             // Refresh
             // =========================================
 
+            formsPlot1.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlot1.Plot.Axes.Left.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
             formsPlot1.Refresh();
         }
     }

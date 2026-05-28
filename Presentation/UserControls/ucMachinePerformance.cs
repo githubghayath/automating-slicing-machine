@@ -49,6 +49,8 @@ namespace Presentation.UserControls
             formsPlot1MachinePerformance.Plot.XLabel("Time (Millisecond)");
             formsPlot1MachinePerformance.Plot.YLabel("Torque (Nm)");
             formsPlot1MachinePerformance.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlot1MachinePerformance.Plot.Axes.Left.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlot1MachinePerformance.Plot.Axes.Bottom.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
             formsPlot1MachinePerformance.Plot.Axes.AutoScaleY();
            
         }
@@ -65,6 +67,8 @@ namespace Presentation.UserControls
             formsPlotProductionVolume.Plot.XLabel("Time (Millisecond)");
             formsPlotProductionVolume.Plot.YLabel("Production Line (m)");
             formsPlotProductionVolume.Plot.Axes.Title.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlotProductionVolume.Plot.Axes.Left.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
+            formsPlotProductionVolume.Plot.Axes.Bottom.Label.ForeColor = ScottPlot.Color.FromHex("#4E6E81");
 
             formsPlotProductionVolume.Refresh();
         }
@@ -97,7 +101,7 @@ namespace Presentation.UserControls
 
             formsPlotProductionVolume.Plot.Add.Scatter(
                 _timeData.ToArray(),
-                _volumeData.ToArray());
+                _volumeData.ToArray()).LineWidth=1;
 
             // Optional auto-scale
             formsPlotProductionVolume.Plot.Axes.AutoScale();
@@ -151,10 +155,14 @@ namespace Presentation.UserControls
             formsPlot1MachinePerformance.Refresh();
         }
 
-        public void LiveChart(double feedRatePerSecond)
+        public void LiveChart(double feedRatePerSecond, int? TimeInMilliSecond)
         {
             _MachinePerformanceLiveChart();
             _MachineProductionVolumLiveChart(feedRatePerSecond);
+
+            TimeSpan time = TimeSpan.FromMilliseconds(Convert.ToDouble(TimeInMilliSecond));
+
+            lblTimeCounter.Text = $"{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
         }
     }
 }
