@@ -1,5 +1,6 @@
 ﻿using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Presentation.DataBase;
 using Presentation.DataBase.Wood;
 using Presentation.Forms;
 using Presentation.UserControls;
@@ -113,7 +114,7 @@ namespace WindowsFormsApp1
         private int _NumberOfBlades = 0;
         private double _TheDistanceBetweenTheCenterOfTheDiscAndTheLowestPointOfTheWoodInMeter = .0d;
         private double _VolumetricProductionRateMeter3Hour = .0d;
-
+        private DateTime _MachineStartsAt;
 
         // Tool Properties 
         private double _RakeAngleInDegrees = .0d;
@@ -227,6 +228,9 @@ namespace WindowsFormsApp1
             pnlCalculationPage.Controls.Add(pnlBody);
 
             btnCalculationPage_Click(null, null);
+
+
+
            
         }
 
@@ -419,6 +423,7 @@ namespace WindowsFormsApp1
         {
             if (cbWoodType.SelectedIndex != 0)
             {
+
                 _SelectedWood = WoodCRUD.GetWoodByName(cbWoodType.SelectedItem!.ToString()!);
 
                 _ShearYieldStress = _SelectedWood.ShearYieldStressInMpa;
@@ -430,6 +435,7 @@ namespace WindowsFormsApp1
                 lblCoefficientOfFriction.Text = _CoefficientOfFriction.ToString();
 
                 btnCalculateForces.Enabled = true;
+
 
             }
             else
@@ -445,10 +451,13 @@ namespace WindowsFormsApp1
 
         private void btnStartMachine_Click(object sender, EventArgs e)
         {
+            _MachineStartsAt = new DateTime();
+            _MachineStartsAt = DateTime.Now;
 
             timer1.Start();
             btnStartMachine.Enabled = false;
             btnStopMachine.Enabled = true;
+            btnEndProcess.Enabled = true;
         }
 
 
@@ -589,6 +598,45 @@ namespace WindowsFormsApp1
 
             btnMaintenance.BackColor = SystemColors.Control;
             btnMaintenance.ForeColor = System.Drawing.Color.FromArgb(23, 70, 62);
+        }
+
+        private void btnEndProcess_Click(object sender, EventArgs e)
+        {
+
+          
+            double _ProductionVolumePerHour = TimeSpan.FromMilliseconds(TimerValueInMilleSecond).TotalHours;
+            double _cuttingForce = Convert.ToDouble(dgvForces.Rows[0].Cells["CuttingForce"].Value);
+            double _activeForce = Convert.ToDouble(dgvForces.Rows[0].Cells["ActiveForce"].Value);
+            double _thrustForce = Convert.ToDouble(dgvForces.Rows[0].Cells["ThrustForce"].Value);
+            double _shearForce = Convert.ToDouble(dgvForces.Rows[0].Cells["ShearForce"].Value);
+            double _normalForceToRake = Convert.ToDouble(dgvForces.Rows[0].Cells["NormalRake"].Value);
+            double _normalForceToShear = Convert.ToDouble(dgvForces.Rows[0].Cells["NormalShear"].Value);
+            double _cuttingMoment = Convert.ToDouble(dgvForces.Rows[0].Cells["CuttingForceMoment"].Value);
+            double _frictionForceOnRake = Convert.ToDouble(dgvForces.Rows[0].Cells["FrictionForce"].Value);
+
+            double _stadiedTheta = Convert.ToDouble(lblExitAngle.Text);
+            double _frictionAngle = Convert.ToDouble(lblFrictionAngle.Text);
+            double _shearAngle = Convert.ToDouble(lblShearAngle.Text);
+            double _frictionCorrectionCofficient = Convert.ToDouble(lblFrictionCorrectionCoefficient.Text);
+            double _enterAngle = Convert.ToDouble(lblEnterAngle.Text);
+            double _leavingAngle = Convert.ToDouble(lblExitAngle.Text);
+            double _centerAngle = Convert.ToDouble(lblCenterCuttingAngle.Text);
+            double _cuttingSpeed = Convert.ToDouble(lblMaxCuttingVelocity.Text);
+            double _feedRate = Convert.ToDouble(lblFeedVelocity.Text);
+            double _sheftSpeed = Convert.ToDouble(lblNumberOfRotations.Text);
+            int _productWidth = 30;
+            int _productHeight = 200;
+            int _WoodTypeId = WoodCRUD.GetWoodByName(cbWoodType.SelectedItem!.ToString()!.Trim()).Id;
+            DateTime _EndAt = DateTime.Now;
+            DateTime _StartAt = _MachineStartsAt;
+
+
+            Binder.Bind(_stadiedTheta, _cuttingForce, _activeForce, _frictionForceOnRake, _thrustForce, _shearForce, _normalForceToShear, _normalForceToRake, _cuttingMoment
+                , _frictionAngle, _shearAngle, _frictionCorrectionCofficient, _enterAngle, _leavingAngle, _centerAngle, _cuttingSpeed, _feedRate, _sheftSpeed,
+                _productWidth, _productHeight, _ProductionVolumePerHour, _WoodTypeId, _StartAt, _EndAt);
+
+            btnEndProcess.Enabled = false;
+            btnStartMachine.Enabled = true;
         }
     }
 }

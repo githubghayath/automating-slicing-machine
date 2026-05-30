@@ -16,7 +16,7 @@ namespace DataAccess.Entities
             double cuttingSpeed,
             double feedRate,
             double sheftSpeed,
-            int consumedElectricity)
+            double consumedElectricity)
         {
             CuttingSpeed = cuttingSpeed;
             FeedRate = feedRate;
@@ -32,7 +32,7 @@ namespace DataAccess.Entities
 
         public double SheftSpeed { get; private set; } // [RPM]
 
-        public int ConsumedElectricity { get; private set; }  // [KW]
+        public double ConsumedElectricity { get; private set; }  // [KW]
 
         public virtual OperationsProcess OperationsProcess { get; private set; } = null!;
     }
