@@ -38,15 +38,15 @@ namespace Presentation.DataBase
 
 
 
-            double NumberOfPowerHours = (EndAt - StartAt).TotalHours;
+            int NumberOfPowerHours = (int)(EndAt - StartAt).TotalHours;
 
-            double consumedElectricity = Presentation.DataBase.Utility.Utility.ElectrcityPricePerKiloWatt * NumberOfPowerHours; // [KWh]
+            int consumedElectricity = (int)Presentation.DataBase.Utility.Utility.ElectrcityPricePerKiloWatt * NumberOfPowerHours; // [KWh]
 
             OperationCondition operationCondition = new OperationCondition(cuttingSpeed, feedRate, sheftSpeed, consumedElectricity);
 
 
             double productionVolume = ProductionVolumePerHour * NumberOfPowerHours;  // [m³]
-            double totalFees = productionVolume * Presentation.DataBase.Utility.Utility.FeesPerCubicMetter; // [Doller]
+            double totalFees = productionVolume * (int)Presentation.DataBase.Utility.Utility.FeesPerCubicMetter; // [Doller]
 
             ProductionCondition productionCondition = new ProductionCondition(productWidth, productHeight, productionVolume, totalFees);
 

@@ -7,7 +7,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using WindowsFormsApp1.Helper;
 
 namespace Presentation.UserControls
 {
@@ -281,29 +280,7 @@ namespace Presentation.UserControls
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var SelectedProcess = _History.SingleOrDefault(s => s.Id == _ProcessNo_FromSelectEvent);
-            string path = $"{clsHelper.ReadFromConfiguration("HistoryReportsPath")}\\Process_{_ProcessNo_FromSelectEvent}.pdf";
-
-            string folder = clsHelper.ReadFromConfiguration("HistoryReportsPath");
-
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-
-            try
-            {
-
-                PdfReportGenerator.GenerateProcessReport(SelectedProcess!, path);
-                MessageBox.Show($"Report generated successfully at:\n{path}", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
-            }
-            catch (Exception ex) 
-            {
-
-                MessageBox.Show($"Something went wrong while generating the report!", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            
+            MessageBox.Show(_ProcessNo_FromSelectEvent.ToString());
         }
 
 

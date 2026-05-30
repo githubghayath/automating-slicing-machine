@@ -108,7 +108,7 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ConsumedElectricity")
-                        .HasColumnType("float");
+                        .HasColumnType("int");
 
                     b.Property<double>("CuttingSpeed")
                         .HasColumnType("float");
