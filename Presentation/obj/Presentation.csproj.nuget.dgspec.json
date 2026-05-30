@@ -435,6 +435,10 @@
               "target": "Package",
               "version": "[4.0.2, )"
             },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2026.5.0, )"
+            },
             "ScottPlot": {
               "target": "Package",
               "version": "[5.1.58, )"

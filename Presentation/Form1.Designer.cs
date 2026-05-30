@@ -75,6 +75,7 @@
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
             label24 = new Label();
             pnlHeader = new Panel();
+            btnEndProcess = new Button();
             label38 = new Label();
             label19 = new Label();
             label36 = new Label();
@@ -109,12 +110,14 @@
             btnProcessHistory = new Button();
             btnMachinePerformance = new Button();
             btnCalculationPage = new Button();
+            pbLogo = new PictureBox();
             pnlBody = new Panel();
             pnlRightSideBar = new Panel();
             pnlCalculationPage = new Panel();
             timer1 = new System.Windows.Forms.Timer(components);
             pnlHeader.SuspendLayout();
             pnlSideBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             pnlBody.SuspendLayout();
             SuspendLayout();
             // 
@@ -631,6 +634,7 @@
             // 
             // pnlHeader
             // 
+            pnlHeader.Controls.Add(btnEndProcess);
             pnlHeader.Controls.Add(label38);
             pnlHeader.Controls.Add(label19);
             pnlHeader.Controls.Add(label36);
@@ -661,6 +665,21 @@
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Size = new Size(1584, 477);
             pnlHeader.TabIndex = 56;
+            // 
+            // btnEndProcess
+            // 
+            btnEndProcess.FlatAppearance.BorderSize = 0;
+            btnEndProcess.FlatStyle = FlatStyle.System;
+            btnEndProcess.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            btnEndProcess.ForeColor = SystemColors.ButtonFace;
+            btnEndProcess.Location = new Point(383, 75);
+            btnEndProcess.Name = "btnEndProcess";
+            btnEndProcess.Size = new Size(116, 31);
+            btnEndProcess.TabIndex = 79;
+            btnEndProcess.Text = "End Process";
+            btnEndProcess.TextAlign = ContentAlignment.BottomCenter;
+            btnEndProcess.UseVisualStyleBackColor = true;
+            btnEndProcess.Click += btnEndProcess_Click;
             // 
             // label38
             // 
@@ -985,10 +1004,10 @@
             pnlSideBar.Controls.Add(btnProcessHistory);
             pnlSideBar.Controls.Add(btnMachinePerformance);
             pnlSideBar.Controls.Add(btnCalculationPage);
+            pnlSideBar.Controls.Add(pbLogo);
             pnlSideBar.Dock = DockStyle.Left;
             pnlSideBar.Location = new Point(0, 0);
             pnlSideBar.Name = "pnlSideBar";
-            pnlSideBar.Padding = new Padding(0, 90, 0, 0);
             pnlSideBar.Size = new Size(118, 918);
             pnlSideBar.TabIndex = 68;
             // 
@@ -1000,7 +1019,7 @@
             btnMaintenance.Font = new Font("Segoe UI", 9F);
             btnMaintenance.ForeColor = SystemColors.ButtonFace;
             btnMaintenance.Image = (Image)resources.GetObject("btnMaintenance.Image");
-            btnMaintenance.Location = new Point(0, 351);
+            btnMaintenance.Location = new Point(0, 375);
             btnMaintenance.Name = "btnMaintenance";
             btnMaintenance.Size = new Size(118, 87);
             btnMaintenance.TabIndex = 72;
@@ -1013,7 +1032,7 @@
             // 
             label3.AutoSize = true;
             label3.ForeColor = SystemColors.ButtonHighlight;
-            label3.Location = new Point(7, 890);
+            label3.Location = new Point(7, 870);
             label3.Name = "label3";
             label3.Size = new Size(103, 20);
             label3.TabIndex = 71;
@@ -1034,7 +1053,7 @@
             btnProcessHistory.Font = new Font("Segoe UI", 9F);
             btnProcessHistory.ForeColor = SystemColors.ButtonFace;
             btnProcessHistory.Image = Presentation.Properties.Resources.history_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnProcessHistory.Location = new Point(0, 264);
+            btnProcessHistory.Location = new Point(0, 288);
             btnProcessHistory.Name = "btnProcessHistory";
             btnProcessHistory.Size = new Size(118, 87);
             btnProcessHistory.TabIndex = 71;
@@ -1051,7 +1070,7 @@
             btnMachinePerformance.Font = new Font("Segoe UI", 9F);
             btnMachinePerformance.ForeColor = SystemColors.ButtonFace;
             btnMachinePerformance.Image = Presentation.Properties.Resources.ssid_chart_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnMachinePerformance.Location = new Point(0, 177);
+            btnMachinePerformance.Location = new Point(0, 201);
             btnMachinePerformance.Name = "btnMachinePerformance";
             btnMachinePerformance.Size = new Size(118, 87);
             btnMachinePerformance.TabIndex = 68;
@@ -1068,7 +1087,7 @@
             btnCalculationPage.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCalculationPage.ForeColor = SystemColors.ButtonFace;
             btnCalculationPage.Image = Presentation.Properties.Resources.home_40dp__DABC72_FILL0_wght400_GRAD0_opsz40;
-            btnCalculationPage.Location = new Point(0, 90);
+            btnCalculationPage.Location = new Point(0, 114);
             btnCalculationPage.Name = "btnCalculationPage";
             btnCalculationPage.Size = new Size(118, 87);
             btnCalculationPage.TabIndex = 68;
@@ -1076,6 +1095,19 @@
             btnCalculationPage.TextAlign = ContentAlignment.BottomCenter;
             btnCalculationPage.UseVisualStyleBackColor = true;
             btnCalculationPage.Click += btnCalculationPage_Click;
+            // 
+            // pbLogo
+            // 
+            pbLogo.BackgroundImageLayout = ImageLayout.None;
+            pbLogo.Dock = DockStyle.Top;
+            pbLogo.Image = Presentation.Properties.Resources.result_0__3_;
+            pbLogo.Location = new Point(0, 0);
+            pbLogo.Name = "pbLogo";
+            pbLogo.Padding = new Padding(0, 10, 0, 0);
+            pbLogo.Size = new Size(118, 114);
+            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pbLogo.TabIndex = 80;
+            pbLogo.TabStop = false;
             // 
             // pnlBody
             // 
@@ -1174,6 +1206,7 @@
             pnlHeader.PerformLayout();
             pnlSideBar.ResumeLayout(false);
             pnlSideBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             pnlBody.ResumeLayout(false);
             pnlBody.PerformLayout();
             ResumeLayout(false);
@@ -1265,6 +1298,8 @@
         private Label label36;
         private Label label19;
         private Label label38;
+        private Button btnEndProcess;
+        private PictureBox pbLogo;
     }
 }
 
