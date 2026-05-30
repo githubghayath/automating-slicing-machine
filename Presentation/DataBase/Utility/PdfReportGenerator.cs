@@ -66,7 +66,7 @@ public static class PdfReportGenerator
                     {
                         col.Item()
                          .AlignCenter()
-                         .Width(65)
+                         .Width(75)
                          .Image(logoBytes);
 
                         col.Item()
